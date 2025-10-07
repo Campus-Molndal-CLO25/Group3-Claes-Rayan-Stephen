@@ -95,8 +95,7 @@ Denna struktur gör det enkelt att:
 - Skapa ordrar med flera produkter.
 - Undvika dataduplicering och hålla databasen normaliserad.
 
----
 
-**Skapat av:** *[Ditt namn / Gruppnamn]*  
+**Skapat av:** Claes,Rayan,Stephan.😎😎😎  
 **Verktyg:** dbdiagram.io  
 **Syfte:** Databasplanering för Halloween Webshop-projektet 🎃
