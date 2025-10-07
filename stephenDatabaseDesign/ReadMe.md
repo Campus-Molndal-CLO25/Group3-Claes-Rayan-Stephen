@@ -1,5 +1,6 @@
 ### 1 -> N  one-to-many  
-Customer has multiple addresses  
+Customer has multiple addresses
+Customers can have multiple orders.
 Product has multiple variants  
 Order has multiple order lines
 ### N <-> M many-to-many  
