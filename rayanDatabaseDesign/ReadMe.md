@@ -21,7 +21,7 @@ Fokus ligger på att planera en normaliserad databasstruktur och visualisera den
 ### Customers
 - Lagrar kundinformation för registrerade användare
 - **Fält:** `id` (PK), `email` (unik), `password_hash`, `first_name`, `last_name`, `phone`, `created_at`
-- En kund kan ha **flera adresser** och **flera beställningar** (N:N)
+- En kund kan ha **flera adresser** och **flera beställningar** (N:M)
 
 ### Addresses
 - Lagrar kunders leveransadresser
@@ -63,6 +63,7 @@ Fokus ligger på att planera en normaliserad databasstruktur och visualisera den
 - **Products → Product Variants:** 1:N  
 - **Products → Categories:** N:M via `ProductCategories`  
 - **Orders → Order Items:** 1:N  
+
 
 
 
