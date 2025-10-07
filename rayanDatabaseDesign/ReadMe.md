@@ -1,68 +1,102 @@
-# Halloween Webshop Database Design
+# 🎃 Halloween Webshop – Databasdesign
 
-Detta projekt innehåller designen av databasen för en Halloween-webshop som säljer kostymer, dekorationer och godis. 
-Fokus ligger på att planera en normaliserad databasstruktur och visualisera den med ER-diagram.
-
----
-
-## Syfte
-
-- Hantera kunder och deras information
-- Hantera leveransadresser
-- Hantera produkter, varianter och lager
-- Hantera kategorier och kopplingar mellan produkter och kategorier
-- Hantera kundbeställningar och orderdetaljer
-- Säkerställa att databasen är normaliserad och undviker dataduplicering
+Detta projekt är en planering av en databas för en Halloween-webshop som säljer kostymer, dekorationer och godis.  
+Syftet är att skapa en normaliserad och tydlig databasstruktur som hanterar kunder, produkter, beställningar och kategorier.
 
 ---
 
-## Tabeller
+## 🧩 Databasöversikt
 
-### Customers
-- Lagrar kundinformation för registrerade användare
-- **Fält:** `id` (PK), `email` (unik), `password_hash`, `first_name`, `last_name`, `phone`, `created_at`
-- En kund kan ha **flera adresser** och **flera beställningar** (1:N)
+Databasen är uppdelad i flera tabeller med tydliga ansvarsområden.  
+Relationerna följer principerna för **1:N** och **N:M** för att undvika dataduplicering.
 
-### Addresses
-- Lagrar kunders leveransadresser
-- **Fält:** `id` (PK), `customer_id` (FK), `street`, `city`, `postal_code`, `region`, `country`, `is_default`
-- `is_default` markerar standardadress för kunden
+### 1. `customers`
+Lagrar grundläggande information om registrerade kunder.
+- En kund kan ha flera adresser.
+- Kolumner: `email`, `first_name`, `last_name`, `phone`, `created_at`.
 
-### Products
-- Lagrar huvudproduktinformation
-- **Fält:** `id` (PK), `sku` (unik), `name`, `description`, `active`, `created_at`
+### 2. `addresses`
+Hantera flera leveransadresser per kund.
+- Relation: `addresses.customer_id` → `customers.id`
+- Fältet `is_default` markerar standardadress.
 
-### Product Variants
-- Lagrar olika varianter av en produkt, t.ex. storlek och färg
-- **Fält:** `id` (PK), `product_id` (FK), `sku`, `size`, `color`, `price`, `stock_quantity`, `allow_backorder`
+### 3. `categories`
+Beskriver olika produktkategorier (t.ex. “Kostymer”, “Godis”, “Dekorationer”).
 
-### Categories
-- Lagrar produktkategorier, t.ex. "Barn", "Kostymer"
-- **Fält:** `id` (PK), `name`, `description`
+### 4. `products`
+Innehåller huvudinformation om en produkt (namn, beskrivning, aktiv status, etc.).
+- Har en SKU (Stock Keeping Unit) för att identifiera produkten.
 
-### Product Categories
-- Koppling mellan produkter och kategorier (N:M)
-- **Fält:** `product_id` (PK, FK), `category_id` (PK, FK)
+### 5. `product_variants`
+En produkt kan ha flera varianter, t.ex. olika **storlekar** eller **färger**.
+- Relation: `product_variants.product_id` → `products.id`
+- Innehåller pris, lagerantal och tillåtelse för restorder.
+- `price` visar nuvarande försäljningspris i butiken.
 
-### Orders
-- Lagrar kundbeställningar
-- **Fält:** `id` (PK), `customer_id` (FK), `shipping_address_id` (FK), `status`, `order_date`, `delivery_date`, `total_amount`
-- En kund kan ha **många beställningar** (1:N)
+### 6. `product_categories`
+Kopplingstabell som hanterar **N:M-relationen** mellan `products` och `categories`.
+- En produkt kan tillhöra flera kategorier.
+- En kategori kan innehålla flera produkter.
 
-### Order Items
-- Lagrar detaljer för produkter i varje beställning
-- **Fält:** `id` (PK), `order_id` (FK), `product_variant_id` (FK), `product_name_snapshot`, `unit_price`, `quantity`, `subtotal`
-- Snapshot av produktnamn och pris säkerställer korrekt historik även om produkten ändras eller tas bort
+### 7. `orders`
+Representerar en kundorder.
+- Relation: `orders.customer_id` → `customers.id`
+- Relation: `orders.shipping_address_id` → `addresses.id`
+- Fält: orderstatus, datum, totalbelopp.
+
+### 8. `order_items`
+Kopplingstabell mellan `orders` och `product_variants`.
+- En order kan innehålla flera produkter.
+- En produktvariant kan finnas i flera ordrar.
+- Relationer:
+  - `order_items.order_id` → `orders.id`
+  - `order_items.product_variant_id` → `product_variants.id`
+- `subtotal` beräknas som `price * quantity`.
 
 ---
 
-## Relationer och kardinalitet
+## 🔗 Relationer och kardinalitet
 
-- **Customers → Orders:** 1:N (en kund kan ha flera beställningar)  
-- **Customers → Addresses:** 1:N (en kund kan ha flera adresser)  
-- **Products → Product Variants:** 1:N  
-- **Products → Categories:** N:M via `ProductCategories`  
-- **Orders → Order Items:** 1:N  
+| Relation | Typ | Beskrivning |
+|-----------|-----|-------------|
+| Customer → Address | 1:N | En kund kan ha flera adresser |
+| Product → ProductVariant | 1:N | En produkt kan ha flera varianter |
+| Product ↔ Category | N:M | Kopplas via `product_categories` |
+| Customer → Order | 1:N | En kund kan göra flera ordrar |
+| Order ↔ ProductVariant | N:M | Kopplas via `order_items` |
 
+---
 
+## ⚙️ Normalisering
 
+Databasen är normaliserad till minst **3NF** (tredje normalformen):
+- Inga upprepade datafält.
+- Varje tabell har ett tydligt syfte.
+- Primärnycklar och främmande nycklar används konsekvent.
+- Kopplingstabeller (`product_categories` och `order_items`) används för alla N:M-relationer.
+
+---
+
+## 💡 Designval och motivering
+
+- **Separata tabeller för adresser:** gör det möjligt för kunder att ha flera leveransadresser utan att duplicera kundinformation.  
+- **`product_variants`:** möjliggör hantering av storlek, färg och pris per variant.  
+- **`order_items`:** kopplar ordrar till produktvarianter och lagrar kvantitet samt delsumma.  
+- **`price` i `product_variants`:** representerar aktuellt försäljningspris; vi har tagit bort `unit_price` för enkelhet i denna version.  
+- **Kategorier:** hanteras via en kopplingstabell för att stödja flera kategorier per produkt.
+
+---
+
+## 🕸️ Sammanfattning
+
+Denna struktur gör det enkelt att:
+- Lägga till nya produktkategorier.
+- Hantera olika storlekar och färger.
+- Skapa ordrar med flera produkter.
+- Undvika dataduplicering och hålla databasen normaliserad.
+
+---
+
+**Skapat av:** *[Ditt namn / Gruppnamn]*  
+**Verktyg:** dbdiagram.io  
+**Syfte:** Databasplanering för Halloween Webshop-projektet 🎃
