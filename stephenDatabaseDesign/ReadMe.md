@@ -8,7 +8,7 @@ A Product can belong to multiple categories and a category can contain multiple 
 A product variant has exactly one inventory record (Inventory)
 
 ## Main parts   
-Customers → Orders → Order items → Products.
+Customers - Orders - Order items - Products.
 ### First:   
 started with the main part — 
 A customer places an Order with multiple Products.
