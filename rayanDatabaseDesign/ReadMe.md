@@ -82,7 +82,7 @@ Databasen är normaliserad till minst **3NF** (tredje normalformen):
 - **Separata tabeller för adresser:** gör det möjligt för kunder att ha flera leveransadresser utan att duplicera kundinformation.  
 - **`product_variants`:** möjliggör hantering av storlek, färg och pris per variant.  
 - **`order_items`:** kopplar ordrar till produktvarianter och lagrar kvantitet samt delsumma.  
-- **`price` i `product_variants`:** representerar aktuellt försäljningspris; vi har tagit bort `unit_price` för enkelhet i denna version.  
+- **`price` i `product_variants`:** representerar aktuellt försäljningspris.  
 - **Kategorier:** hanteras via en kopplingstabell för att stödja flera kategorier per produkt.
 
 ---
