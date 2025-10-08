@@ -25,7 +25,7 @@ Beskriver olika produktkategorier (t.ex. “Kostymer”, “Godis”, “Dekorat
 
 ### 4. `products`
 Innehåller huvudinformation om en produkt (namn, beskrivning, aktiv status, etc.).
-- Har en SKU (Stock Keeping Unit) för att identifiera produkten.
+
 
 ### 5. `product_variants`
 En produkt kan ha flera varianter, t.ex. olika **storlekar** eller **färger**.
@@ -100,4 +100,5 @@ Denna struktur gör det enkelt att:
 **Skapat av:** Claes,Rayan,Stephan.😎😎😎  
 **Verktyg:** dbdiagram.io  
 **Syfte:** Databasplanering för Halloween Webshop-projektet 🎃
+
 
